@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+// import EtudiaLanding from './components/EtudiaLanding';
+// import EtudiaSelection from './components/EtudiaSelection';
+
+// function App() {
+//   return <EtudiaLanding />;
+//           <EtudiaSelection />
+// }
+
+// export default App;
+
+import EtudiaSelection from './components/EtudiaSelection';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <EtudiaSelection />;
 }
 
 export default App;
+
+
+// import EtudiaModules from './components/EtudiaModules';
+
+// function App() {
+//   return <EtudiaModules />;
+// }
+
+// export default App;
