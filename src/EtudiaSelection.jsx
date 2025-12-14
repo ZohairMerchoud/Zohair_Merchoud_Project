@@ -1,70 +1,75 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
+import logo from './images/image_etudia-removebg-preview.png';
 
-export default function EtudiaSelection() {
+export default function EtudiaSelection({ onContinue }) {
+  const navigate = useNavigate();
   const [anneeSelectionnee, setAnneeSelectionnee] = useState(null);
   const [niveauSelectionne, setNiveauSelectionne] = useState(null);
 
   const annees = ['1er Année', '2eme Année', '3eme Année'];
   const niveaux = ['Technicien', 'Technicien Spécialisé'];
 
-  const handleAnnee = (annee) => {
-    setAnneeSelectionnee(annee);
-  };
-
-  const handleNiveau = (niveau) => {
-    setNiveauSelectionne(niveau);
+  
+  const filiereMapping = {
+    'Technicien 1er Année': 4,
+    'Technicien 2eme Année': 5,
+    'Technicien 3eme Année': 6,
+    'Technicien Spécialisé 1er Année': 1,
+    'Technicien Spécialisé 2eme Année': 2,
+    'Technicien Spécialisé 3eme Année': 3,
   };
 
   const handleContinue = () => {
     if (anneeSelectionnee && niveauSelectionne) {
-      alert(`Année: ${anneeSelectionnee}\nNiveau: ${niveauSelectionne}`);
+      const key = `${niveauSelectionne} ${anneeSelectionnee}`;
+      const filiere_id = filiereMapping[key];
+      const selection = { annee: { name: anneeSelectionnee }, niveau: niveauSelectionne, filiere_id };
+
+      if (onContinue) onContinue(selection);
+      navigate('/modules'); 
     }
   };
 
   return (
     <div className="container">
-      {/* Header */}
       <div className="header">
-        <div className="logo-box">
-          <span className="logo-icon">🎓</span>
+        <div className="diagonal"></div>
+        <div className="logo-container">
+          <img src={logo} alt="Logo Etudia" />
         </div>
-        <h1 className="logo-text">Etudia</h1>
-        <p className="logo-subtitle">Learn more</p>
-        <div className="wave"></div>
       </div>
 
       {/* Main Content */}
       <div className="main-content">
-        {/* Section Année */}
+        {/* Niveau */}
         <div className="section">
-          <h2 className="section-title">Tu es dans :</h2>
-          <div className="section-underline"></div>
+          <h2 className="section-title">Niveau :</h2>
           <div className="button-group">
-            {annees.map((annee) => (
+            {niveaux.map(n => (
               <button
-                key={annee}
-                className={`button ${anneeSelectionnee === annee ? 'active' : ''}`}
-                onClick={() => handleAnnee(annee)}
+                key={n}
+                className={`button ${niveauSelectionne === n ? 'active' : ''}`}
+                onClick={() => setNiveauSelectionne(n)}
               >
-                {annee}
+                {n}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Section Niveau */}
+        {/* Année */}
         <div className="section">
-          <h2 className="section-title">Niveau :</h2>
-          <div className="section-underline"></div>
+          <h2 className="section-title">Année :</h2>
           <div className="button-group">
-            {niveaux.map((niveau) => (
+            {annees.map(a => (
               <button
-                key={niveau}
-                className={`button ${niveauSelectionne === niveau ? 'active' : ''}`}
-                onClick={() => handleNiveau(niveau)}
+                key={a}
+                className={`button ${anneeSelectionnee === a ? 'active' : ''}`}
+                onClick={() => setAnneeSelectionnee(a)}
               >
-                {niveau}
+                {a}
               </button>
             ))}
           </div>
@@ -73,8 +78,8 @@ export default function EtudiaSelection() {
         {/* Info et bouton continuer */}
         {anneeSelectionnee && niveauSelectionne && (
           <div className="info-box">
-            <p>Année: {anneeSelectionnee}</p>
             <p>Niveau: {niveauSelectionne}</p>
+            <p>Année: {anneeSelectionnee}</p>
             <button className="continue-button" onClick={handleContinue}>
               Continuer
             </button>
@@ -82,7 +87,7 @@ export default function EtudiaSelection() {
         )}
       </div>
 
-      {/* Triangles décorativement en bas */}
+      {/* Triangles en bas */}
       <div className="triangles-container">
         {[...Array(12)].map((_, i) => (
           <div key={i} className="triangle"></div>
