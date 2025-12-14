@@ -1,10 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css';
+import logo from './images/image_etudia-removebg-preview.png';
 
-export default function EtudiaModules() {
+export default function EtudiaModules({ selection }) {
+  const { filiere_id, annee, niveau } = selection || {};
+  const [modules, setModules] = useState([]);
+  const [filiere, setFiliere] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [moduleSelectionne, setModuleSelectionne] = useState(null);
 
-  const modules = ['Module 1', 'Module 2', 'Module 3', 'Module 4', 'Module 5'];
+  useEffect(() => {
+    if (!filiere_id) return;
+
+    fetch(`https://podo.b1.ma/api/public/filieres/${filiere_id}/modules`)
+      .then(res => {
+        if (!res.ok) throw new Error('Erreur API modules');
+        return res.json();
+      })
+      .then(json => {
+        if (json.success) {
+          setModules(json.data || []);
+          setFiliere(json.filiere || null);
+        } else {
+          setError('Modules introuvables');
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [filiere_id]);
 
   const handleModuleClick = (module) => {
     setModuleSelectionne(module);
@@ -15,43 +42,61 @@ export default function EtudiaModules() {
       {/* Header */}
       <div className="header">
         <div className="diagonal"></div>
-        
         <div className="logo-container">
-          <div className="logo-box">
-            <span className="logo-icon">🎓</span>
-          </div>
-          <h1 className="logo-text">Etudia</h1>
-          <p className="logo-subtitle">Learn more</p>
+          <img src={logo} alt="Logo Etudia" />
         </div>
-        <div className="wave"></div>
       </div>
 
       {/* Main Content */}
       <div className="main-content">
-        {/* Section Modules */}
-        <div className="section">
-          <h2 className="section-title">Listes des modules :</h2>
-          <div className="section-underline"></div>
-          <div className="button-group">
-            {modules.map((module) => (
-              <button
-                key={module}
-                className={`button ${moduleSelectionne === module ? 'active' : ''}`}
-                onClick={() => handleModuleClick(module)}
+        <h2 className="section-title">Modules pour {niveau} - {annee?.name}</h2>
+        {filiere && <p className="filiere-info">Filière: {filiere.name}</p>}
+
+        {loading && <p>Chargement des modules...</p>}
+        {error && <p className="text-red-600">{error}</p>}
+        {!loading && modules.length === 0 && <p>Aucun module trouvé.</p>}
+
+        <div className="modules-grid">
+          {modules.map(m => (
+            <div key={m.id} className={`module-card ${moduleSelectionne?.id === m.id ? 'selected' : ''}`}>
+              <div className="module-header">
+                <h3>{m.name}</h3>
+                <span className="module-code">{m.code}</span>
+              </div>
+              <p>Crédits: {m.credits} | Heures: {m.total_hours}</p>
+              <p>Professeur: {m.instructor}</p>
+
+              {m.efms && m.efms.length > 0 && (
+                <div className="efms-section">
+                  <strong>EFM :</strong>
+                  <ul>
+                    {m.efms.map(e => (
+                      <li key={e.id}>
+                        <a href={e.file_path} target="_blank" rel="noopener noreferrer" className="efm-link">
+                          {e.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <button 
+                className="select-module-btn"
+                onClick={() => handleModuleClick(m)}
               >
-                {module}
+                {moduleSelectionne?.id === m.id ? 'Sélectionné' : 'Choisir ce module'}
               </button>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
-        {/* Info et bouton continuer */}
         {moduleSelectionne && (
           <div className="info-box">
-            <p>Sélectionné: {moduleSelectionne}</p>
+            <p>Module sélectionné: {moduleSelectionne.name}</p>
             <button 
-              className="continue-button" 
-              onClick={() => alert(`Vous avez choisi: ${moduleSelectionne}`)}
+              className="continue-button"
+              onClick={() => alert(`Vous avez choisi: ${moduleSelectionne.name}`)}
             >
               Continuer
             </button>
@@ -59,7 +104,7 @@ export default function EtudiaModules() {
         )}
       </div>
 
-      {/* Triangles décorativement en haut */}
+      {/* Triangles en bas */}
       <div className="triangles-container">
         {[...Array(12)].map((_, i) => (
           <div key={i} className="triangle"></div>
