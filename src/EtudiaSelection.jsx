@@ -1,39 +1,43 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../App.css';
-import logo from './images/image_etudia-removebg-preview.png';
+import React, { useState } from "react";
+import "../App.css";
+import logo from "./images/image_etudia-removebg-preview.png";
 
 export default function EtudiaSelection({ onContinue }) {
-  const navigate = useNavigate();
+  /*  États  */
   const [anneeSelectionnee, setAnneeSelectionnee] = useState(null);
   const [niveauSelectionne, setNiveauSelectionne] = useState(null);
 
-  const annees = ['1er Année', '2eme Année', '3eme Année'];
-  const niveaux = ['Technicien', 'Technicien Spécialisé'];
+  /*  Données  */
+  const annees = ["1er Année", "2eme Année", "3eme Année"];
+  const niveaux = ["Technicien", "Technicien Spécialisé"];
 
-  
+  /*  Mapping (API)  */
   const filiereMapping = {
-    'Technicien 1er Année': 4,
-    'Technicien 2eme Année': 5,
-    'Technicien 3eme Année': 6,
-    'Technicien Spécialisé 1er Année': 1,
-    'Technicien Spécialisé 2eme Année': 2,
-    'Technicien Spécialisé 3eme Année': 3,
+    "Technicien 1er Année": 4,
+    "Technicien 2eme Année": 5,
+    "Technicien 3eme Année": 6,
+    "Technicien Spécialisé 1er Année": 1,
+    "Technicien Spécialisé 2eme Année": 2,
+    "Technicien Spécialisé 3eme Année": 3,
   };
 
+  /*  Bouton Continuer  */
   const handleContinue = () => {
     if (anneeSelectionnee && niveauSelectionne) {
       const key = `${niveauSelectionne} ${anneeSelectionnee}`;
       const filiere_id = filiereMapping[key];
-      const selection = { annee: { name: anneeSelectionnee }, niveau: niveauSelectionne, filiere_id };
-
+      const selection = {
+        annee: { name: anneeSelectionnee },
+        niveau: niveauSelectionne,
+        filiere_id,
+      };
       if (onContinue) onContinue(selection);
-      navigate('/modules'); 
     }
   };
 
   return (
     <div className="container">
+      {/* HEADER */}
       <div className="header">
         <div className="diagonal"></div>
         <div className="logo-container">
@@ -41,45 +45,57 @@ export default function EtudiaSelection({ onContinue }) {
         </div>
       </div>
 
-      {/* Main Content */}
+      {/*  MESSAGE/ INFO  */}
+      <div className="welcome-box">
+        <h2>Bienvenue sur votre espace étudiant ! 🎓</h2>
+        <p>
+          Choisissez votre niveau et votre année pour accéder à vos modules,
+          suivre vos cours et préparer vos examens efficacement.
+        </p>
+      </div>
+
       <div className="main-content">
-        {/* Niveau */}
+        {/*  NIVEAU  */}
         <div className="section">
           <h2 className="section-title">Niveau :</h2>
           <div className="button-group">
-            {niveaux.map(n => (
+            {niveaux.map((niveau) => (
               <button
-                key={n}
-                className={`button ${niveauSelectionne === n ? 'active' : ''}`}
-                onClick={() => setNiveauSelectionne(n)}
+                key={niveau}
+                className={`button ${
+                  niveauSelectionne === niveau ? "active" : ""
+                }`}
+                onClick={() => setNiveauSelectionne(niveau)}
               >
-                {n}
+                {niveau}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Année */}
+        {/*  ANNÉE  */}
         <div className="section">
           <h2 className="section-title">Année :</h2>
           <div className="button-group">
-            {annees.map(a => (
+            {annees.map((annee) => (
               <button
-                key={a}
-                className={`button ${anneeSelectionnee === a ? 'active' : ''}`}
-                onClick={() => setAnneeSelectionnee(a)}
+                key={annee}
+                className={`button ${
+                  anneeSelectionnee === annee ? "active" : ""
+                }`}
+                onClick={() => setAnneeSelectionnee(annee)}
               >
-                {a}
+                {annee}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Info et bouton continuer */}
+        {/* CONTINUER */}
         {anneeSelectionnee && niveauSelectionne && (
           <div className="info-box">
-            <p>Niveau: {niveauSelectionne}</p>
-            <p>Année: {anneeSelectionnee}</p>
+            <p>Niveau : {niveauSelectionne}</p>
+            <p>Année : {anneeSelectionnee}</p>
             <button className="continue-button" onClick={handleContinue}>
               Continuer
             </button>
@@ -87,7 +103,7 @@ export default function EtudiaSelection({ onContinue }) {
         )}
       </div>
 
-      {/* Triangles en bas */}
+      {/*  DÉCORATION  */}
       <div className="triangles-container">
         {[...Array(12)].map((_, i) => (
           <div key={i} className="triangle"></div>
