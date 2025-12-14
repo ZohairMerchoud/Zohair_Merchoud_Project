@@ -1,26 +1,28 @@
-// import EtudiaLanding from './components/EtudiaLanding';
-// import EtudiaSelection from './components/EtudiaSelection';
-
-// function App() {
-//   return <EtudiaLanding />;
-//           <EtudiaSelection />
-// }
-
-// export default App;
-
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import EtudiaLanding from './components/EtudiaLanding';
 import EtudiaSelection from './components/EtudiaSelection';
+import EtudiaModules from './components/EtudiaModules';
+
 
 function App() {
-  return <EtudiaSelection />;
+  const [selection, setSelection] = useState(null);
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<EtudiaLanding />} />
+        <Route 
+          path="/selection" 
+          element={<EtudiaSelection onContinue={setSelection} />} 
+        />
+        <Route 
+          path="/modules" 
+          element={<EtudiaModules selection={selection} />} 
+        />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
-
-
-// import EtudiaModules from './components/EtudiaModules';
-
-// function App() {
-//   return <EtudiaModules />;
-// }
-
-// export default App;
