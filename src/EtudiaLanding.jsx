@@ -1,47 +1,49 @@
 import React from 'react';
 import '../App.css';
+import logo from './images/image_etudia-removebg-preview.png'
 
-export default function EtudiaLanding() {
+function EtudiaLanding() {
   return (
     <div className="container">
-      {/* Header avec fond bleu */}
       <div className="header">
-        {/* Diagonale en haut à droite */}
         <div className="diagonal"></div>
         
-        {/* Logo et titre */}
         <div className="logo-container">
-          <div className="logo-box">
-            <span className="logo-icon">🎓</span>
-          </div>
-          <h1 className="logo-text">Etudia</h1>
-          <p className="logo-subtitle">Learn more</p>
+            <img src={logo} alt="" />
         </div>
       </div>
 
-      {/* Container principal */}
       <div className="main-content">
-        {/* Texte principal */}
         <div className="text-section">
           <h2 className="title">
             Bienvenue,
-            <div className="underline"></div>
+            <div className="underline1"></div>
           </h2>
+          <br />
           
           <h3 className="title">
-            Cher<br />
-            Apprenant,
-            <div className="underline"></div>
+            Cher Apprenant,
+            <div className="underline2"></div>
           </h3>
         </div>
       </div>
 
-      {/* Triangles décorativement en haut */}
       <div className="triangles-container">
-        {[...Array(12)].map((_, i) => (
-          <div key={i} className="triangle"></div>
-        ))}
+        <div className="triangle small"></div>
+        <div className="triangle"></div>
+        <div className="triangle small"></div>
+        <div className="triangle"></div>
+        <div className="triangle small"></div>
+        <div className="triangle"></div>
+        <div className="triangle small"></div>
+        <div className="triangle"></div>
+        <div className="triangle small"></div>
+        <div className="triangle"></div>
+        <div className="triangle"></div>
+        <div className="triangle"></div>
       </div>
     </div>
   );
 }
+
+export default EtudiaLanding;
